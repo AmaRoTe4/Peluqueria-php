@@ -232,12 +232,19 @@ p {
   width: 95%;
   margin: 0 auto;
   padding: 3rem 0;
+  overflow-x: hidden;
 }
 @media (min-width: 768px) {
   .contenedor-app .app {
-    overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
   }
 }
+
+.app::-webkit-scrollbar{
+    display: none;
+}
+
 .barra {
   margin: 5rem 0;
 }
@@ -522,13 +529,5 @@ p {
 }
 .ocultar {
   visibility: hidden;
-}
-
-.errores{
-    background-color: red ; 
-    padding: 10px;
-    width: 90%; 
-    text-align: center; 
-    margin: 10px 0px;
 }
 /*# sourceMappingURL=app.css.map */

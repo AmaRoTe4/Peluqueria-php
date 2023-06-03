@@ -4,9 +4,11 @@ require_once __DIR__ . '/../includes/app.php';
 
 use MVC\Router;
 use Controllers\LoginController;
+use Controllers\CitaController;
 
 $router = new Router();
 
+//public
 $router->get("/login" , [LoginController::class, "login"]);
 $router->get("/forgot" , [LoginController::class, "forgot"]);
 $router->get("/logout" , [LoginController::class, "logout"]);
@@ -19,5 +21,8 @@ $router->post("/login" , [LoginController::class, "login"]);
 $router->post("/forgot" , [LoginController::class, "forgot"]);
 $router->post("/recover" , [LoginController::class, "recover"]);
 $router->post("/create" , [LoginController::class, "create"]);
+
+//private
+$router->get("/citas" , [CitaController::class, "index"]);
 
 $router->comprobarRutas();

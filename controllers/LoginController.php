@@ -34,7 +34,7 @@ class LoginController{
                     $_SESSION['admin'] = 1;
                     header("Location: /admin");
                 }else{
-                    header("Location: /main");
+                    header("Location: /citas");
                 }
 
             }
