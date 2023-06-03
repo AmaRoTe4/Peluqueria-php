@@ -1,7 +1,15 @@
 <h1 class="nombre-pagina">Recuperar Password</h1>
 <p class="descripcion-pagina">Coloca tu nuevo password a continuación</p>
 
-<form class="formulario" method="POST">
+<?php foreach($errores as $err):?>
+    <div class="message errores">
+        <?php echo $err; ?>
+    </div>
+<?php endforeach?>
+
+<?php if(!$recover) return ?>
+
+<form class="formulario" method="POST" action="/recover?token=<?php echo $token ?>">
     <div class="campo">
         <label for="password">Password</label>
         <input
@@ -17,5 +25,5 @@
 
 <div class="acciones">
     <a href="/">¿Ya tienes cuenta? Iniciar Sesión</a>
-    <a href="/crear-cuenta">¿Aún no tienes cuenta? Obtener una</a>
+    <a href="/create">¿Aún no tienes cuenta? Obtener una</a>
 </div>

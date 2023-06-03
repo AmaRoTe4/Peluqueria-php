@@ -1,7 +1,13 @@
 <h1 class="nombre-pagina">Olvide Password</h1>
 <p class="descripcion-pagina">Reestablece tu password escribiendo tu email a continuación</p>
 
-<form class="formulario" action="/olvide" method="POST">
+<?php foreach($errores as $err):?>
+    <div class="message errores">
+        <?php echo $err; ?>
+    </div>
+<?php endforeach?>
+
+<form class="formulario" action="/forgot" method="POST">
     <div class="campo">
         <label for="email">Email</label>
         <input 
@@ -17,5 +23,5 @@
 
 <div class="acciones">
     <a href="/">¿Ya tienes una cuenta? Inicia Sesión</a>
-    <a href="/crear-cuenta">¿Aún no tienes una cuenta? Crear Una</a>
+    <a href="/crear">¿Aún no tienes una cuenta? Crear Una</a>
 </div>

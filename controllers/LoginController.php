@@ -54,14 +54,65 @@ class LoginController{
 
     public static function forgot(Router $router){
         //get and post
+        $errores = [];
+        $usuario = new Usuarios;
 
-        $router->render("auth/forgot");
+        if($_SERVER["REQUEST_METHOD"] == "POST"){
+            if($_POST["email"] != ""){
+                $usuario->email = $_POST["email"];
+                $resp = $usuario->verEmail();
+    
+                $id = $resp["id"];
+                $errores = $resp["errores"];
+    
+                if(empty($errores)) {
+                    $usuario = $usuario->find($id);
+                    $usuario->crearToken();
+                    $usuario->guardar();
+
+                    Header("Location: /recover?token=$usuario->token");
+                }
+            }
+        }
+
+        $router->render("auth/forgot" , [
+            "errores" => $errores
+        ]);
     }
 
     public static function recover(Router $router){
         //get and post
+        $errores = [];
+        $usuario = new Usuarios;
+        $recover = false;
+        $token = $_GET['token'];
+        $id = $usuario->includesData("token" , $token);
 
-        $router->render("auth/recover");
+        if($id != 0){
+            $recover = true;
+            $usuario = $usuario->find($id);
+        }else $errores[] = "el token es invalido";
+
+        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            $password = $_POST['password'];
+            
+            if(!$password) $errores[] = "Tiene que escribir una contraseña, es obligatoria";
+            else if(strlen($password) >= 6){
+                $usuario->password = $password;
+                $usuario->encriptarPassword();
+                $usuario->confirmado = 1;
+                $usuario->token = null;
+                $resultado = $usuario->guardar();
+                
+                if($resultado) header("location: /login");
+            }else $errores[] = "la contraseña tiene que tener como minimo 6 digitos";
+        }
+
+        $router->render("auth/recover" , [
+            "errores" => $errores,
+            "recover" => $recover,
+            "token" => $token
+        ]);
     }
 
     public static function create(Router $router){

@@ -57,18 +57,38 @@ class Usuarios extends Principal{
         $this->token = uniqid();
     }
 
+    public function verEmail():array{
+        $errores = [];
+        
+        $idEmail = $this->includesData("email" , $this->email);
+        if($idEmail == 0) $errores[] = "Correo no registrado";
+    
+        return [
+            "id" => $idEmail,
+            "errores" => $errores
+        ];
+    }
+
+    public function verPassword($pass):array{
+        $errores = [];
+        if(!password_verify($this->password , $pass)) $errores[] = "Contraseña incorrecta";
+        return $errores;
+    }
+
     public function verificarLogin():array{
         $errores = [];
 
         if($this->email != "" && $this->password != ""){
-            $idEmail = $this->includesData("email" , $this->email);
-            if($idEmail == 0) $errores[] = "Correo no registrado";
-            $user = static::find($idEmail);
+            $respData = $this->verEmail();
+            $errores = $respData['errores'];
+            $id = $respData['id'];
+
+            $user = static::find($id);
             $conf = $user->confirmado;
             $pass = $user->password;
             
             if($conf == 0) $errores[] = "Usuario no Verficado";
-            if(!password_verify($this->password , $pass)) $errores[] = "Contraseña incorrecta";
+            $errores = $errores + $this->verPassword($pass);
         } else $errores[] = "Debe completar todos los campos entes de iniciar sesion";
     
         return [
